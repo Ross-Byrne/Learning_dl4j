@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 /**
@@ -146,27 +147,33 @@ public class ClassifierNN {
         //System.out.println(trainingData.getFeatureMatrix());
         //System.out.println(output);
 
-
         System.out.println("\nTesting Inputs\n");
 
         INDArray inputs = Nd4j.create(new double[] {1, 0, 0, 0}); // create inputs
-        normalizer.transform(inputs); // normalise them
-        output = model.output(inputs); // 0 // run through classifier
-        System.out.println(output);
+        System.out.println(getNetworkOutput(model, normalizer, inputs)); // expected result: 0
 
         inputs = Nd4j.create(new double[] {0, 1, 0, 0.5});
-        normalizer.transform(inputs);
-        output = model.output(inputs); // 3
-        System.out.println(output);
+        System.out.println(getNetworkOutput(model, normalizer, inputs)); // expected result: 3
 
-//        output = model.output(Nd4j.create(new double[] {0.5, 0, 1, 1})); // 1
-//        System.out.println(output);
-//        output = model.output(Nd4j.create(new double[] {0, 1, 0, 0})); // 2
-//        System.out.println(output);
+        inputs = Nd4j.create(new double[] {0.5, 0, 1, 1}); // expected result: 1
+        System.out.println(getNetworkOutput(model, normalizer, inputs));
 
+        inputs = Nd4j.create(new double[] {0, 1, 0, 0}); // expected result: 2
+        System.out.println(getNetworkOutput(model, normalizer, inputs));
 
 
     } // main()
+
+    // method for normalising input, running it through the neural net and returning the output
+    private static INDArray getNetworkOutput(MultiLayerNetwork net, DataNormalization normalizer, INDArray input){
+
+        // normalise inputs
+        normalizer.transform(input);
+
+        // run input through Neural Net
+        return net.output(input);
+
+    } // getModelOutput()
 
 
 } // class
