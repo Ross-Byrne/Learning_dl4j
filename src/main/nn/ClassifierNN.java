@@ -158,8 +158,7 @@ public class ClassifierNN {
         inputs = Nd4j.create(new double[] {0.5, 0, 1, 1}); // expected result: 1
         System.out.println(getNetworkOutput(model, normalizer, inputs));
 
-        inputs = Nd4j.create(new double[] {0, 1, 0, 0}); // expected result: 2
-        System.out.println(getNetworkOutput(model, normalizer, inputs));
+        System.out.println(getNetworkOutput(model, normalizer, Nd4j.create(new double[] {0, 1, 0, 0}))); // expected result: 2
 
 
     } // main()
